@@ -1,0 +1,101 @@
+
+    /* General page styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f9fafb;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    /* Label styling */
+    label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    /* Paragraph styles for issue details */
+    p {
+        font-size: 14px;
+        color: #7f8c8d;
+        background-color: #ecf0f1;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #bdc3c7;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        word-wrap: break-word;
+    }
+
+    /* Image styling */
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 20px 0;
+        border-radius: 8px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Back Button Styling */
+    button {
+        display: inline-block;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 6px;
+        text-align: center;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+        background-color: #2980b9;
+        transform: translateY(-3px);
+    }
+
+    button:focus {
+        outline: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            width: 90%;
+            padding: 15px;
+        }
+
+        p {
+            font-size: 13px;
+        }
+
+        button {
+            width: 100%;
+            font-size: 18px;
+            padding: 15px;
+        }
+    }

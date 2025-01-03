@@ -1,0 +1,77 @@
+/* Style for the Hamburger Menu */
+.hamburger-menu-container {
+    display: none;  /* Hide on desktop */
+    cursor: pointer;
+    z-index: 100;
+}
+
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+}
+
+.hamburger-icon .bar {
+    height: 4px;
+    background-color: #333;
+    width: 100%;
+}
+
+/* The Navbar Menu */
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 0;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* For mobile view, hide navbar by default */
+@media (max-width: 768px) {
+    .hamburger-menu-container {
+        display: block; /* Show hamburger icon on small screen */
+    }
+    
+    .navbar {
+        display: none; /* Hide navbar by default */
+        width: 100%;
+        background-color: #333;
+    }
+    
+    .navbar ul {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .navbar ul li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .navbar.open {
+        display: block; /* Show navbar when opened */
+    }
+}

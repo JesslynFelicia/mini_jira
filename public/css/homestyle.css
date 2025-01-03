@@ -1,0 +1,379 @@
+/* Global Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Title */
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2b5797;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Form Styles */
+.user-form, .search-form {
+    margin-bottom: 20px;
+  
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.user-form {
+    margin-bottom: 30px; /* Memberikan jarak lebih banyak pada form user untuk mencegah tumpang tindih */
+}
+
+.form-control {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: normal;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+    box-shadow: none;
+    margin: 0;
+}
+
+/* Tombol Assign User */
+.assign-user-toggle .btn {
+    display: inline-block;
+}
+
+.assign-user-toggle {
+    display: inline-block;
+    margin: 0;
+}
+
+/* Header & Toggle */
+.header-section {
+    background-color: #2b5797;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.header-toggle {
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+#headerContent {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f4f7f6;
+    border-radius: 8px;
+    display: none;
+}
+
+/* Project Card Styles */
+.project-card {
+    background: #fff;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.project-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2b5797;
+}
+
+.project-meta {
+    font-size: 14px;
+    color: #555;
+}
+
+.project-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.project-actions .btn {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 8px 12px; /* Memberikan padding yang lebih besar untuk tombol */
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+}
+
+.project-actions .btn-edit, .project-actions .btn-delete {
+    width: 48%; /* Tombol Edit dan Delete akan lebih lebar agar sejajar */
+}
+
+/* Issues Table */
+.issues-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.issues-table th, .issues-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.issues-table th {
+    background-color: #2b5797;
+    color: white;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start; /* Menyusun tombol secara horizontal */
+}
+
+.issues-table .action-buttons .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+}
+
+/* Add Issue Button */
+.add-issue {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-issue .btn {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Project Details */
+.project-details {
+    display: none;
+}
+
+/* Toggle Button and Project Detail */
+.project-header:hover .project-title {
+    text-decoration: underline;
+}
+
+/* Styling for the toggle section */
+#filter-user-toggle {
+    background-color: #0078d7;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    width: 40%;
+}
+
+#filter-user-toggle:hover {
+    background-color: #005a9e;
+}
+
+/* Form Styling */
+.user-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Repeated .form-control styling already exists above, so no need to duplicate */
+
+.btn-primary {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #005a9e;
+}
+
+/* For smaller screens, make the form responsive */
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+    }
+}
+
+/* Toggle Filter User Section */
+#filter-user-toggle {
+    background-color: #0078d7;
+    color: white;
+    cursor: pointer;
+    /* padding: 10px; */
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#filter-user-toggle:hover {
+    background-color: #005a9e;
+}
+
+#filter-user-content {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f4f7f6;
+    border-radius: 8px;
+}
+
+#btn-issue{
+    display: flex;
+    gap: 10px;
+}
+
+#filter-user{
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+th .sort-arrow {
+    margin-left: 5px;
+    font-size: 12px;
+    color: #888; /* Grey color for arrows */
+    cursor: pointer;
+}
+
+th[data-sort-order="asc"] .sort-arrow {
+    color: green; /* Green for ascending order */
+}
+
+th[data-sort-order="desc"] .sort-arrow {
+    color: red; /* Red for descending order */
+}
+
+.auth-buttons {
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Modal Background */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Image */
+.modal-content img {
+    width: 100%;
+    height: auto;
+}
+
+/* Close Button */
+.modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: #000;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-content .close:hover {
+    color: red;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.search{
+    display: flex;
+    gap: 10px; 
+}
+
+.project-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2b5797;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-items: center; /* Vertically aligns the title and issue count */
+}
+
+.issue-count {
+    font-size: 0.9rem;
+    color: #666;
+    margin-left: 10px;
+    font-weight: normal;
+}
