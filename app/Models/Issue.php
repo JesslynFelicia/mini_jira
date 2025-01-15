@@ -22,6 +22,7 @@ class Issue extends Model
         'priority',
         'pic',
         'due_date',
-        'status'
+        'status',
+        'filter'
     ];
 }

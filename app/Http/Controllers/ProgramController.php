@@ -22,6 +22,7 @@ class ProgramController extends Controller
             ->select(
                 'id_issue',
                 'tb_project.id_project',
+                'tb_project.project_description AS project_description',
                 'issue_title',
                 'issue_type',
                 'issue_desc',
@@ -33,9 +34,15 @@ class ProgramController extends Controller
                 'tb_project.owner',
                 'tb_project.created_at',
                 'tb_project.due_date AS project_due_date',
+                'tb_project.updated_at AS project_updated_at',
                 'tb_issue.due_date AS issue_due_date',
-                'tb_issue.status AS issue_status'
+                'tb_issue.updated_at AS issue_updated_at',
+                'tb_issue.status AS issue_status',
+                'tb_issue.created_at AS issue_created_at',
+                 'filter'
             )
+            ->where('filter', 'accepted')
+            ->orwhere('filter', null)
             ->get();
 
         // dd($projects);
@@ -49,6 +56,7 @@ class ProgramController extends Controller
             ->select(
                 'id_issue',
                 'tb_project.id_project',
+                'tb_project.project_description AS project_description',
                 'issue_title',
                 'issue_type',
                 'issue_desc',
@@ -60,16 +68,21 @@ class ProgramController extends Controller
                 'tb_project.created_at',
                 'tb_project.PIC AS pic_project',
                 'tb_project.due_date AS project_due_date',
+                
                 'tb_issue.due_date AS issue_due_date',
-                'tb_issue.status AS issue_status'
+                'tb_issue.created_at AS issue_created_at',
+                'tb_issue.updated_at AS issue_updated_at',
+                'tb_issue.status AS issue_status',
+                'filter'
             )
             ->where('tb_project.PIC', $curruser->name)
             ->get();
-
+            // dump ($curruser->name);
+        // dd($projects);
         return $projects;
     }
 
-    private function getotherprojects($curruser,$projects)
+    private function getotherprojects($curruser, $projects)
     {
         $projectIds = $projects->pluck('id_project')->toArray();
         $otherprojects = DB::table('tb_project')
@@ -77,6 +90,7 @@ class ProgramController extends Controller
             ->select(
                 'id_issue',
                 'tb_project.id_project',
+                'tb_project.project_description AS project_description',
                 'issue_title',
                 'issue_type',
                 'issue_desc',
@@ -86,25 +100,34 @@ class ProgramController extends Controller
                 'project_title',
                 'tb_project.PIC AS pic_project',
                 'tb_project.owner',
-                'tb_project.created_at',
+                'tb_project.created_at AS project_created_at',
                 'tb_project.due_date AS project_due_date',
+                'tb_issue.created_at AS issue_created_at',
                 'tb_issue.due_date AS issue_due_date',
-                'tb_issue.status AS issue_status'
+                'tb_issue.updated_at AS issue_updated_at',
+                'tb_issue.status AS issue_status',
+                 'filter'
             )
-            ->where(function($query) use ($curruser) {
+            // ->where(function ($query) use ($curruser) {
+            //     // Kelompokkan kondisi orWhere di sini
+            //     $query->where('issue_type', 'bug')
+            //         ->orWhere('tb_issue.pic', $curruser->name);
+            // })
+            ->where(function ($query) use ($curruser) {
                 // Kelompokkan kondisi orWhere di sini
-                $query->where('issue_type', 'bug')
-                      ->orWhere('tb_issue.pic', $curruser->name);
+                $query->where('filter', 'accepted')
+                ->orWhere('filter',null);
             })
+    
             ->whereNot('tb_project.pic', $curruser->name)
             ->whereNotIn('tb_project.id_project', $projectIds)
             ->get();
 
-//             dump($projects);
-//            dump($curruser->name);
-// dump($otherprojects);
-// dump($otherprojects[0]->pic_project);
-
+        //             dump($projects);
+                
+        // dump($otherprojects);
+        // dump($otherprojects[0]->pic_project);
+// dd($otherprojects);
         return $otherprojects;
     }
 
@@ -157,7 +180,7 @@ class ProgramController extends Controller
 
         // Fetch projects based on user type curruser1 = filter
         if ($curruser1) {
-            
+
             // For Super User (su)
             if ($curruser1->user_type == 'su') {
                 $projects = $this->getallprojects($curruser1);
@@ -166,8 +189,8 @@ class ProgramController extends Controller
             elseif ($curruser1->user_type == 'common') {
                 // dd($curruser1);
                 $projects = $this->getcurrentprojects($curruser1);
-// dd($projects);
-                $otherprojects = $this->getotherprojects($curruser1,$projects);
+                // dd($projects);
+                $otherprojects = $this->getotherprojects($curruser1, $projects);
                 // dd($otherprojects);
             }
         } else {
@@ -180,7 +203,9 @@ class ProgramController extends Controller
 
                 $projects = $this->getcurrentprojects($curruser);
 
-                $otherprojects = $this->getotherprojects($curruser,$projects);
+                // dd($projects);
+
+                $otherprojects = $this->getotherprojects($curruser, $projects);
             }
         }
 
@@ -218,7 +243,7 @@ class ProgramController extends Controller
                     foreach ($projectFields as $field) {
                         // dump($field);
                         if (is_string($field) && str_contains(strtolower($field), $search)) {
-                         
+
                             return true; // Return the entire project object if it matches
                         }
                     }
@@ -226,9 +251,8 @@ class ProgramController extends Controller
                     // If no field matches, return false to exclude it
                     return false;
                 });
-               
-        }
-           
+            }
+
 
             if ($otherprojects) {
                 // dump($otherprojects);
@@ -254,7 +278,7 @@ class ProgramController extends Controller
             if ($notes) {
                 // dump($notes);
                 //salah di getobjectvars
-                
+
                 // dump("notes");
                 $notes = $notes->filter(function ($note) use ($search) {
                     // Convert search string to lowercase
@@ -267,7 +291,7 @@ class ProgramController extends Controller
                     foreach ($noteFields as $field) {
                         // dump($field);
                         if (is_string($field) && str_contains(strtolower($field), $search)) {
-                          
+
                             return true; // Return the entire note object if it matches
                         }
                     }
@@ -276,18 +300,18 @@ class ProgramController extends Controller
                     return false;
                 });
                 // dump($notes);
-              
+
             }
         }
 
-$expand = false;
-if (    $request->session()->get('expandedProject')){
-    $expand =     $request->session()->get('expandedProject');
-    session()->forget('expandedProject');
-}
-    
+        $expand = false;
+        if ($request->session()->get('expandedProject')) {
+            $expand =     $request->session()->get('expandedProject');
+            session()->forget('expandedProject');
+        }
+
         // Return the view with the relevant data
-        return view('home', compact('projects', 'users', 'curruser', 'otherprojects', 'curruser1', 'notes', 'filter','expand'));
+        return view('home', compact('projects', 'users', 'curruser', 'otherprojects', 'curruser1', 'notes', 'filter', 'expand'));
     }
 
     public function insertProgramsView()
@@ -359,8 +383,9 @@ if (    $request->session()->get('expandedProject')){
     {
         $project = Project::find($project_id);
         $users = User::all();
+        $curruser = session()->get('curruser');
         // dd($project);
-        return view('projects.editprojects', compact('project', 'users'));
+        return view('projects.editprojects', compact('project', 'users','curruser'));
     }
 
     public function editproject(Request $request)
@@ -371,7 +396,8 @@ if (    $request->session()->get('expandedProject')){
         $project->update([
             'project_title' => $request->project_title,
             'pic' => $request->pic,
-            'due_date' =>$request->due_date
+            'due_date' => $request->due_date,
+            'project_description' => $request->project_description,
         ]);
 
 

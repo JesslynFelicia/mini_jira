@@ -1,330 +1,136 @@
-<!-- Main Layout -->
 @include('header')
 
-
-
-<!-- buat gambar -->
-<div id="popup-container">
-
-</div>
-
-<!-- expand project -->
+<body class="bg-white">
 
 
 
 
-@if (!session('curruser'));
-<div class="auth-buttons">
-    <a href="/login" class="btn btn-primary">Login</a>
-    <a href="/register" class="btn btn-secondary">Register</a>
-</div>
-@else
-<div class="auth-buttons">
-    <a href="/logout" class="btn btn-primary">Logout</a>
-
-</div>
-@endif
-
-<div class="container">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-1/4 bg-gradient-to-r from-blue-700 to-blue-800 shadow-lg p-6 overflow-y-auto">
+            <!-- Search Bar untuk Project -->
+            <ul>
+                <li class="mb-3">
+                    <a href="#" id="all-projects" class="text-white hover:bg-blue-600 p-2 rounded-lg block transition duration-300 ease-in-out">
+                        All Projects
+                    </a>
+                </li>
+            </ul>
 
 
+            <!-- <h2 class="text-xl font-bold mb-4 text-white">Projects</h2> -->
+            <!-- <ul>
+
+                @if ($projects && !empty($projects->first()))
+                @foreach ($projects->groupBy('id_project') as $projectId => $groupedIssues)
+                <li class="mb-3" onclick="togglevisibility()">
+                    <a href="#" data-project-id="{{ $projectId }}" class="project-link text-white hover:bg-blue-600 p-2 rounded-lg block transition duration-300 ease-in-out">
+                        {{ $groupedIssues[0]->project_title }}
+                    </a>
 
 
-    @if (session('curruser')->user_type =='su')
-    <div id="filter-user-toggle" onclick="toggleFilterUser()">
-        <h3>Filter User</h1>
-    </div>
-    @endif
-
-    <form action="/home" method="POST" class="user-form">
-        @csrf
-        @if (session('curruser')->user_type =='su')
-        <div id="filter-user" class="form-group" id="filter-user" style="display: none;">
-            <label for="user-select">Select User:</label>
-            <select id="user-select" name="user_id" class="form-control">
-                @foreach ($users as $user)
-                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                </li>
                 @endforeach
-            </select>
+                @endif
+            </ul> -->
 
-        </div>
-        @endif
+            <!-- @if ($otherprojects && !empty($otherprojects->first()))
+            <h2 class="text-xl font-bold mb-4 text-white">Other Projects</h2>
+            <ul>
+                @foreach ($otherprojects->groupBy('id_project') as $projectId => $groupedIssues)
+                <li class="mb-3">
+                    <a href="#" data-project-id="{{ $projectId }}" class="project-link text-white hover:bg-blue-600 p-2 rounded-lg block transition duration-300 ease-in-out">
+                        {{ $groupedIssues[0]->project_title }}
+                    </a>
 
-
-        @if ($curruser)
-        <div class="current-user">
-            <p>You are accessing as <strong>{{ $curruser->name }}</strong></p>
-        </div>
-        @endif
-
-
-        <div class="search">
-            <!-- Search Section -->
-            <label for="search">Search:</label>
-            <input type="text" id="search" name="search" placeholder="Enter keywords" class="form-control">
-
-            <label for="filter" class="mr-2">Filter:</label>
-            <select name="filter" id="filter" class="form-control mr-2">
-                <option value="All" {{ old('filter', $filter) == 'All' ? 'selected' : '' }}>All</option>
-                <option value="projects" {{ old('filter', $filter) == 'projects' ? 'selected' : '' }}>Project</option>
-                <option value="otherprojects" {{ old('filter', $filter) == 'otherprojects' ? 'selected' : '' }}>Other Projects</option>
-                <option value="notes" {{ old('filter', $filter) == 'notes' ? 'selected' : '' }}>Note</option>
-            </select>
-            <br>
-            <button type="submit" class="btn btn-secondary">Search</button>
-    </form>
-</div>
-
-<div class="add_stuff" style="display: flex;">
-    @if (session('curruser')->user_type =='su')
-    <!-- Add Project Section -->
-    <div class="add-project">
-        <a href="/insertprojectview" class="btn-primary btn">Add Project</a>
-    </div>
-
-    @endif
-
-    <div class="add-notes">
-        <a href="/insertnotes" class="btn btn-success btn">Add Notes</a>
-
-        <br>
-    </div>
-</div>
-
-<!-- Projects Section -->
-<div class="projects-section">
-    @if ($projects && !empty($projects->first()) )
-    <h1 class="page-title">Programs</h1>
-
-    @foreach ($projects->groupBy('id_project') as $projectId => $groupedIssues)
-    <div class="project-card">
-        @if ($expand == $projectId)
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                toggleProject('{{ $projectId }}');
-            });
-        </script>
-        @endif
-        <div class="project-header" onclick="toggleProject('{{ $projectId }}')">
-            <h2 class="project-title">{{ $groupedIssues[0]->project_title }}</h2>
-            @if($groupedIssues[0]->issue_title)
-            <span class="issue-count">({{ count($groupedIssues) }} Issues)</span>
-            @else
-            <span class="issue-count">(0 Issues)</span>
-            @endif
-            <div class="project-meta">
-                <span><strong>Owner:</strong> {{ $groupedIssues[0]->owner }}</span>
-                <span><strong>Project ID:</strong> {{ $groupedIssues[0]->id_project }}</span>
-                <span><strong>PIC:</strong> {{ $groupedIssues[0]->pic_project }}</span>
-                <span><strong>Date Created:</strong> {{ $groupedIssues[0]-> created_at}}</span>
-                <span><strong>Due Date:</strong> {{ $groupedIssues[0]-> project_due_date}}</span>
-            </div>
-
-            <!-- dd{{$curruser}} -->
-            @if ($curruser->user_type=='su')
-            <div class="project-actions">
-                <a href="/editprojectview/{{ $groupedIssues[0]->id_project }}" class="btn btn-primary">Edit</a>
-                <form action="/delete/project/{{$groupedIssues[0]->id_project}}" method="POST" class="inline-form" onsubmit="return confirmDelete()">
-                    @csrf
-                    @method('DELETE')
-
-                    <input type="hidden" id="curruser" name="curruser" value="{{$curruser->id}}">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-            @endif
-
-        </div>
-
-        <!-- <button class="btn btn-toggle" onclick="toggleProject('{{ $projectId }}')">Expand</button> -->
-
-        <div id="project-{{ $projectId }}" class="project-details" style="display:none;">
-            @if($groupedIssues[0]->id_issue !=null)
-            <table class="issues-table">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(this, 'string')">Issue Title <span class="sort-arrow"></span></th>
-                        <!-- <th onclick="sortTable(this, 'string')">Description <span class="sort-arrow"></span></th> -->
-                        <th onclick="sortTable(this, 'string')">Type <span class="sort-arrow"></span></th>
-                        <th onclick="sortTable(this, 'string')">Priority <span class="sort-arrow"></span></th>
-                        <!-- <th onclick="sortTable(this, 'string')">Note <span class="sort-arrow"></span></th> -->
-                        <th onclick="sortTable(this, 'string')">PIC <span class="sort-arrow"></span></th>
-                        <th onclick="sortTable(this, 'string')">Date Created <span class="sort-arrow"></span></th>
-                        <th onclick="sortTable(this, 'string')">Due Date <span class="sort-arrow"></span></th>
-                        <th>Details</th>
-                        <th>Status</th>
-                        @if ($curruser->user_type=='su')
-                        <th>Actions</th>
-                        @endif
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($groupedIssues as $issue)
-                    <tr>
-                        <td>{{ $issue->issue_title }}</td>
-                        <!-- <td>{{ $issue->issue_desc }}</td> -->
-                        <td>{{ $issue->issue_type }}</td>
-                        <td>{{ $issue->priority }}</td>
-                        <!-- <td>{{ $issue->note }}</td> -->
-                        <td>{{ $issue->pic }}</td>
-                        <td>{{$issue->created_at}}</td>
-                        <td>{{$issue ->issue_due_date}}</td>
-
-
-                        <td>
-                            <button class="view-image" data-id="{{ $issue->id_issue }}">
-                                View Image
-                            </button>
-
-                            <!-- <a href="/image/{{$issue->id_issue}}" class="view-details">
-                                    View Image
-                                </a> -->
-                            <a href="/showissue/{{$issue->id_issue}}" class="view-details">
-                                View Details
-                            </a>
-                        </td>
-
-                        <td>{{$issue -> issue_status}}</td>
-                        @if ($curruser->user_type=='su')
-                        <td id="btn-issue">
-                            <a href="/editissueview/{{$issue->id_issue}}" class="btn btn-primary">Edit</a>
-                            <form action="/delete/issue/{{$issue->id_issue}}" method="POST" class="inline-form" onsubmit="return confirmDelete()">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" id="expandedProject" name="expandedProject" value="{{$groupedIssues[0]->id_project}}">
-                                <input type="hidden" id="curruser" name="curruser" value="{{$curruser->id}}">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                        @endif
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            @else
-            <p class="no-issues">No issues available for this project.</p>
-            @endif
-
-            @if ($curruser->user_type=='su')
-            <div class="add-issue">
-                <a href="insertissueview/{{$groupedIssues[0]->id_project}}" class="btn btn-success">Insert Issue</a>
-            </div>
-            @endif
-        </div>
-    </div>
-    @endforeach
-
-    @endif
-</div>
-
-
-@if($otherprojects)
-@if (!empty($otherprojects->first()))
-<h1 class="page-title">Other Projects</h1>
-@foreach ($otherprojects->groupBy('id_project') as $projectId => $groupedIssues)
-<div class="project-card">
-    <div class="project-header" onclick="toggleProject('{{ $projectId }}')">
-        <h2 class="project-title">{{ $groupedIssues[0]->project_title }}</h2>
-        <span class="issue-count">({{ count($groupedIssues) }} Issues)</span>
-        <div class="project-meta">
-            <span><strong>PIC:</strong> {{ $groupedIssues[0]->pic_project }}</span>
-            <span><strong>Project ID:</strong> {{ $groupedIssues[0]->id_project }}</span>
-            <span><strong>Date Created:</strong> {{ $groupedIssues[0]-> created_at}}</span>
-            <span><strong>Due Date:</strong> {{ $groupedIssues[0]-> project_due_date}}</span>
-        </div>
-    </div>
-
-    <!-- <button class="btn btn-toggle" onclick="toggleProject('{{ $projectId }}')">Expand</button> -->
-
-    <div id="project-{{ $projectId }}" class="project-details" style="display:none;">
-        @if($groupedIssues[0]->id_issue !=null)
-        <table class="issues-table">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(this, 'string')">Issue Title <span class="sort-arrow"></span></th>
-                    <!-- <th onclick="sortTable(this, 'string')">Description <span class="sort-arrow"></span></th> -->
-                    <th onclick="sortTable(this, 'string')">Type <span class="sort-arrow"></span></th>
-                    <th onclick="sortTable(this, 'string')">Priority <span class="sort-arrow"></span></th>
-                    <!-- <th onclick="sortTable(this, 'string')">Note <span class="sort-arrow"></span></th> -->
-                    <th onclick="sortTable(this, 'string')">PIC <span class="sort-arrow"></span></th>
-                    <th onclick="sortTable(this, 'string')">Date Created <span class="sort-arrow"></span></th>
-                    <th onclick="sortTable(this, 'string')">Due Date <span class="sort-arrow"></span></th>
-                    <th>Details</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($groupedIssues as $issue)
-                <tr>
-                    <td>{{ $issue->issue_title }}</td>
-                    <!-- <td>{{ $issue->issue_desc }}</td> -->
-                    <td>{{ $issue->issue_type }}</td>
-                    <td>{{ $issue->priority }}</td>
-                    <!-- <td>{{ $issue->note }}</td> -->
-                    <td>{{ $issue->pic }}</td>
-                    <td>{{$issue->created_at}}</td>
-                    <td>{{$issue ->issue_due_date}}</td>
-                    <td>{{$issue -> issue_status}}</td>
-
-
-                    <td>
-                        <button class="view-image" data-id="{{ $issue->id_issue }}">
-                            View Image
-                        </button>
-
-                        <!-- <a href="/image/{{$issue->id_issue}}" class="view-details">
-                                    View Image
-                                </a> -->
-
-                        <a href="/showissue/{{$issue->id_issue}}" class="view-details">
-                            View Details
-                        </a>
-
-                    </td>
-                </tr>
+                </li>
                 @endforeach
-            </tbody>
-        </table>
-        @else
-        <p class="no-issues">No issues available for this project.</p>
-        @endif
+            </ul>
+            @endif -->
+
+            <!-- Tombol logout dan add project -->
+            <div class="mt-6">
+                <a href="/logout" class="block bg-blue-600 text-white text-center py-2 px-4 rounded-lg">Logout</a>
+            </div>
+            <div class="mt-4">
+                <a href="/insertprojectview" class="block bg-blue-600 text-white text-center py-2 px-4 rounded-lg">Add Project</a>
+            </div>
+            <div class="mt-4" id="achild">
+                <a href="/insertissue" class="block bg-blue-600 text-white text-center py-2 px-4 rounded-lg">Add Issue</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-grow p-6 overflow-y-auto">
+
+            <input type="text" id="project-search" placeholder="Search Projects..." class="mb-4 p-2 rounded w-full text-gray-700">
+
+            <!-- Kontrol Project (Edit, Delete) -->
+
+
+
+            <!-- Isi project dan issue -->
+            <div class="space-y-6">
+                <a href="/insertprojectview" class="mt-6 inline-block bg-green-500 text-white py-2 px-4 rounded-lg">Create New Project</a>
+                <a href="/issues" class="mt-6 inline-block bg-green-500 text-white py-2 px-4 rounded-lg">Show your pending issues</a>
+
+                <div id='parent'>
+                    <h1 class='all-title'>Projects</h1>
+                    <div id="projects-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+
+                        @if ($projects && !empty($projects->first()))
+                        @foreach ($projects->groupBy('id_project') as $projectId => $groupedIssues)
+
+
+                        <div class="bg-white shadow-md rounded-lg overflow-hidden all-projects-view">
+                            <div class="p-4">
+                                <h2 class="text-xl font-bold text-gray-800">{{ $groupedIssues[0]->project_title }}</h2>
+                                <p class="text-gray-600">PIC: {{ $groupedIssues[0]->pic_project }}</p> <!-- Assuming you have a 'pic' field -->
+                                <button class="bg-blue-600 text-white py-2 px-4 mt-4 rounded project-link" data-project-id="{{ $projectId }}">View Issues</button>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                    <h1 class='all-title'>Other Projects</h2>
+                        <div id="projects-grid2" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+                            @if ($otherprojects && !empty($otherprojects->first()))
+                            @foreach ($otherprojects->groupBy('id_project') as $projectId => $groupedIssues)
+                            <div class="bg-white shadow-md rounded-lg overflow-hidden all-projects-view">
+                                <div class="p-4">
+                                    <h2 class="text-xl font-bold text-gray-800">{{ $groupedIssues[0]->project_title }}</h2>
+                                    <p class="text-gray-600">PIC: {{ $groupedIssues[0]->pic_project }}</p> <!-- Assuming you have a 'pic' field -->
+                                    <button class="bg-blue-600 text-white py-2 px-4 mt-4 rounded project-link" data-project-id="{{ $projectId }}">View Issues</button>
+                                </div>
+                            </div>
+                            @endforeach
+                            @endif
+                        </div>
+                </div>
+
+                @if ($projects && !empty($projects->first()))
+                @foreach ($projects->groupBy('id_project') as $projectId => $groupedIssues)
+                <!-- Setiap project punya id unik berdasarkan projectId -->
+
+              
+                @include('homeissue')
+                @endforeach
+                @endif
+            </div>
+
+            <div class="space-y-6">
+               
+                @if ($otherprojects && !empty($otherprojects->first()))
+         
+                @foreach ($otherprojects->groupBy('id_project') as $projectId => $groupedIssues)
+                <!-- Setiap project punya id unik berdasarkan projectId -->
+           
+               
+                @include('homeissue')
+                @endforeach
+                @endif
+            </div>
+        </main>
     </div>
-</div>
-@endforeach
 
-@endif
-
-@endif
-
-<div class="notes-section">
-    @if ($notes && !empty($notes->first()))
-    <h1 class="page-title">Notes</h1>
-
-    @foreach ($notes as $note)
-    <div class="project-card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
-        <div class="note-content">
-            <!-- dd{{$note}} -->
-            <p>{{ $note->notes }}</p>
-        </div>
-        <div class="note-actions" style="display: flex; gap: 10px;">
-            <a href="/editnotes/{{$note->id_notes}}" class="btn btn-primary">Edit</a>
-            <!-- <button class="btn btn-danger">Delete</button> -->
-
-            <form action="/delete/notes/{{$note->id_notes}}" method="POST" class="inline-form" onsubmit="return confirmDelete()">
-                @csrf
-                @method('DELETE')
-                <input type="hidden" id="curruser" name="curruser" value="{{$curruser->id}}">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-
-        </div>
-    </div>
-    @endforeach
-
-
-    @endif
-</div>
-
-
-
-</div>
+</body>
