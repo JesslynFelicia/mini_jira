@@ -62,7 +62,7 @@
 
         <!-- Main Content -->
         <main class="flex-grow p-6 overflow-y-auto">
-
+        <h1>WELCOME {{$curruser->name}}</h1>
             <input type="text" id="project-search" placeholder="Search Projects..." class="mb-4 p-2 rounded w-full text-gray-700">
 
             <!-- Kontrol Project (Edit, Delete) -->

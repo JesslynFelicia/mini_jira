@@ -142,6 +142,7 @@ class IssueController extends Controller
         $issue->pic = $request->pic;
         $issue->note = $request->note;
         $issue->status = $request->status;
+        $issue->issue_owner = $request->owner;
         $issue->priority = strtolower($request->priority);
 
         $issue->save();

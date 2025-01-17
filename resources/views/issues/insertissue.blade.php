@@ -76,6 +76,7 @@
         @if($curruser->user_type !== 'su')
         <input type="hidden" name="pic" value="{{ $curruser->name }}">
         @endif
+        <input type="hidden" name="owner" value="{{ $curruser->name }}">
 
         <!-- Notes -->
         <div class="form-group">

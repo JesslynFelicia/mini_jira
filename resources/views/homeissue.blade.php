@@ -52,17 +52,19 @@
 
                         <p class="text-gray-500 text-sm">Created At: {{ $issue->issue_created_at }}</p> <!-- Baris 23 -->
                         <p class="text-gray-500 text-sm">Updated At: {{ $issue->issue_updated_at }}</p> <!-- Baris 24 -->
+                        <p>issue owner = {{$issue->issue_owner}}</p>
 
 
                         <div class="mt-2 flex space-x-4">
                             <a href="/viewissue/{{ $issue->id_issue }}" class="text-blue-500">View Details</a>
-
+@if($curruser->user_type ==  'su' || $curruser->name == $issue->issue_owner )
                             <a href="/editissue/{{ $issue->id_issue }}" class="text-blue-500">Edit</a>
                             <form action="/delete/issue/{{ $issue->id_issue }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-500">Delete</button>
                             </form>
+                            @endif
                         </div>
                     </div>
                     @endif

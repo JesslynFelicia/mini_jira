@@ -39,6 +39,7 @@ class ProgramController extends Controller
                 'tb_issue.updated_at AS issue_updated_at',
                 'tb_issue.status AS issue_status',
                 'tb_issue.created_at AS issue_created_at',
+                'tb_issue.issue_owner',
                  'filter'
             )
             ->where('filter', 'accepted')
@@ -73,9 +74,12 @@ class ProgramController extends Controller
                 'tb_issue.created_at AS issue_created_at',
                 'tb_issue.updated_at AS issue_updated_at',
                 'tb_issue.status AS issue_status',
+                'tb_issue.issue_owner',
                 'filter'
             )
             ->where('tb_project.PIC', $curruser->name)
+            ->orWhere('tb_issue.pic', $curruser->name)
+            ->orWhere('issue_type','bug')
             ->get();
             // dump ($curruser->name);
         // dd($projects);
@@ -106,13 +110,14 @@ class ProgramController extends Controller
                 'tb_issue.due_date AS issue_due_date',
                 'tb_issue.updated_at AS issue_updated_at',
                 'tb_issue.status AS issue_status',
+                'tb_issue.issue_owner',
                  'filter'
             )
-            // ->where(function ($query) use ($curruser) {
-            //     // Kelompokkan kondisi orWhere di sini
-            //     $query->where('issue_type', 'bug')
-            //         ->orWhere('tb_issue.pic', $curruser->name);
-            // })
+            ->where(function ($query) use ($curruser) {
+                // Kelompokkan kondisi orWhere di sini
+                $query->where('issue_type', 'bug')->orWhere('issue_type',null);
+     
+            })
             ->where(function ($query) use ($curruser) {
                 // Kelompokkan kondisi orWhere di sini
                 $query->where('filter', 'accepted')
@@ -123,7 +128,7 @@ class ProgramController extends Controller
             ->whereNotIn('tb_project.id_project', $projectIds)
             ->get();
 
-        //             dump($projects);
+                    // dump($projects);
                 
         // dump($otherprojects);
         // dump($otherprojects[0]->pic_project);
@@ -331,6 +336,7 @@ class ProgramController extends Controller
         // $project->save();
         $project->insert([
             'project_title' => $request->project_title,
+            'project_description' => $request->project_description,
             'PIC' => $request->pic,
             'owner' => $request->owner,
             'due_date' => $request->due_date
